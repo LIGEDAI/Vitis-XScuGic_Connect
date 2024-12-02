@@ -22,13 +22,15 @@
       {
           led_state = 0;
       }
+      
       XGpioPs_WritePin(&Gpio, MIO_LED,led_state);
+      
       XScuTimer_ClearInterruptStatus(timer_ptr);
      }
       
-      //定时器中断初始化
-   void timer_intr_init(XScuGic *intc_ptr,XScuTimer *timer_ptr)
-    {
+    //定时器中断初始化
+    void timer_intr_init(XScuGic *intc_ptr,XScuTimer *timer_ptr)
+     {
       //初始化中断控制器
       XScuGic_Config *intc_cfg_ptr;
       intc_cfg_ptr = XScuGic_LookupConfig(INTC_DEVICE_ID);
@@ -44,5 +46,5 @@
       XScuGic_Enable(intc_ptr, TIMER_IRPT_INTR); //使能GIC中的定时器中断
       XScuTimer_EnableInterrupt(timer_ptr);      //使能定时器中断
      }
-      
+     
 在设置定时器中断处的代码`XScuGic_Connect(intc_ptr, TIMER_IRPT_INTR, (Xil_ExceptionHandler)timer_intr_handler, (void *)timer_ptr);`就将中断与自定义的中断程序关联了起来，每次中断触发时（此处为定时器中断`TIMER_IRPT_INTR`），就会执行中断程序。
